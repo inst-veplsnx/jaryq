@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "Audiobook",
+    "slug": "audiobook-talkback",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yourname.audiobooktalkback",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"],
+        "NSMicrophoneUsageDescription": "Applicatipn does not use a microphone",
+        "UIAccessibilityIsVoiceOverRunning": true
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.yourname.audiobooktalkback",
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.WAKE_LOCK",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.RECEIVE_BOOT_COMPLETED"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "extra": {
+      "supabaseUrl": "https://gadnsdnbflexvggcghji.supabase.co",
+      "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhZG5zZG5iZmxleHZnZ2NnaGppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2Njk1NTQsImV4cCI6MjA5MTI0NTU1NH0.lZYYOy3PxdJ7Yqlc3KLHiOaWrh3aMyQHp3hpabesQEA"
+    }
+  }
+}
