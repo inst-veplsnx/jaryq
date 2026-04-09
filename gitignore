@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native builds
+ios/
+android/
+
+# Environment variables — НИКОГДА не коммитьте ключи!
+.env
+.env.local
+.env.*.local
+
+# Supabase keys (если вынесете в отдельный файл)
+src/services/supabase.local.ts
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# TypeScript
+*.tsbuildinfo
+
+# Build output
+build/
+out/
