@@ -1,0 +1,4 @@
+export const SEARCH_DEBOUNCE_MS = 400;
+export const AUTOSAVE_INTERVAL_MS = 10_000;
+export const SEEK_STEP_SECONDS = 30;
+export const DOWNLOAD_COMPLETE_CLEAR_DELAY_MS = 1_000;
