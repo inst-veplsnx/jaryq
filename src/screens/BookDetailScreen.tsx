@@ -78,7 +78,7 @@ export default function BookDetailScreen() {
         announceForAccessibility('Добавлено в избранное');
       }
     } catch {
-      Alert.alert('Қате', 'Таңдаулыларды жаңарту сәтсіз аяқталды. Қайталап көріңіз.');
+      Alert.alert('Ошибка', 'Не удалось обновить избранное. Попробуйте ещё раз.');
     } finally {
       setFavLoading(false);
     }
@@ -90,12 +90,12 @@ export default function BookDetailScreen() {
     const downloadedCount = chapters.filter(ch => isChapterDownloaded(book.id, ch.id)).length;
     if (downloadedCount === chapters.length) {
       Alert.alert(
-        'Барлық жүктеулерді жою',
-        `Бұл кітаптың барлық ${chapters.length} жүктелген тарауын жою керек пе?`,
+        'Удалить все загрузки',
+        `Удалить все ${chapters.length} загруженных глав этой книги?`,
         [
-          { text: 'Бас тарту', style: 'cancel' },
+          { text: 'Отмена', style: 'cancel' },
           {
-            text: 'Жою',
+            text: 'Удалить',
             style: 'destructive',
             onPress: async () => {
               await deleteBookDownloads(book.id);
@@ -118,12 +118,12 @@ export default function BookDetailScreen() {
     const downloaded = isChapterDownloaded(book.id, chapter.id);
     if (downloaded) {
       Alert.alert(
-        'Тарауды жою',
-        `"${chapter.title || `Тарау ${chapter.chapter_number}`}" жою керек пе?`,
+        'Удалить главу',
+        `Удалить «${chapter.title || `Глава ${chapter.chapter_number}`}»?`,
         [
-          { text: 'Бас тарту', style: 'cancel' },
+          { text: 'Отмена', style: 'cancel' },
           {
-            text: 'Жою',
+            text: 'Удалить',
             style: 'destructive',
             onPress: async () => {
               await deleteChapter(book.id, chapter.id);

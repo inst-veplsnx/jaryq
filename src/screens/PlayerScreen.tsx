@@ -66,6 +66,8 @@ export default function PlayerScreen() {
   const didFinishRef = useRef(false);
 
   const lastSavedPositionRef = useRef<number>(-1);
+  const prevBufferingRef = useRef(false);
+  const lastSeekAnnouncedRef = useRef(0);
 
   const doSave = useCallback(async () => {
     if (!user || !book?.id) return;
@@ -85,7 +87,12 @@ export default function PlayerScreen() {
   const onStatus = useCallback((status: AVPlaybackStatus) => {
     if (!status.isLoaded) return;
     setIsPlaying(status.isPlaying);
-    setIsBuffering(!!status.isBuffering && status.isPlaying);
+    const nowBuffering = !!status.isBuffering && status.isPlaying;
+    setIsBuffering(nowBuffering);
+    if (nowBuffering && !prevBufferingRef.current) {
+      announceForAccessibility('Буферизация...');
+    }
+    prevBufferingRef.current = nowBuffering;
     const pos = (status.positionMillis || 0) / 1000;
     const dur = (status.durationMillis || 0) / 1000;
     setPosition(pos);
@@ -139,9 +146,9 @@ export default function PlayerScreen() {
       Animated.timing(advanceOverlayOpacity, { toValue: 0, duration: 300, useNativeDriver: true }).start();
       announceForAccessibility(chs[idx].title || `Глава ${chs[idx].chapter_number}`);
     } catch (err: any) {
-      setInitError(err?.message || 'Тарауды жүктеу қатесі');
+      setInitError(err?.message || 'Ошибка загрузки главы');
       setLoading(false);
-      Alert.alert('Қате', `Тарауды жүктеу сәтсіз аяқталды: ${err?.message || 'белгісіз қате'}`);
+      Alert.alert('Ошибка', `Не удалось загрузить главу: ${err?.message || 'неизвестная ошибка'}`);
     }
   }, [onStatus, book?.id, isChapterDownloaded, set]);
 
@@ -164,7 +171,7 @@ export default function PlayerScreen() {
         setChapters(chs);
         if (!chs.length) {
           setLoading(false);
-          setInitError('Қолжетімді тараулар жоқ');
+          setInitError('Нет доступных глав');
           return;
         }
         set({ currentBook: book, currentChapter: chs[startIdx] });
@@ -184,9 +191,9 @@ export default function PlayerScreen() {
         }
       } catch (err: any) {
         if (!cancelled) {
-          setInitError(err?.message || 'Инициализация қатесі');
+          setInitError(err?.message || 'Ошибка инициализации');
           setLoading(false);
-          Alert.alert('Қате', `Кітапты жүктеу сәтсіз аяқталды: ${err?.message || 'белгісіз қате'}`);
+          Alert.alert('Ошибка', `Не удалось загрузить книгу: ${err?.message || 'неизвестная ошибка'}`);
         }
       }
     };
@@ -218,7 +225,7 @@ export default function PlayerScreen() {
 
   useEffect(() => {
     if (!resumeMsg) return;
-    announceForAccessibility(`Возобновление с ${formatTime(positionRef.current)}`);
+    announceForAccessibility(`Возобновление с ${formatTimeVoice(positionRef.current)}`);
     Animated.sequence([
       Animated.timing(resumeOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
       Animated.delay(2500),
@@ -231,7 +238,7 @@ export default function PlayerScreen() {
     return (
       <View style={s.center}>
         <Icon name="warning" size={56} color={colors.textMuted} />
-        <Text style={s.errorText} accessible={true} accessibilityRole="alert">Кітап табылмады</Text>
+        <Text style={s.errorText} accessible={true} accessibilityRole="alert" accessibilityLabel="Книга не найдена">Кітап табылмады</Text>
       </View>
     );
   }
@@ -437,6 +444,7 @@ export default function PlayerScreen() {
             accessible={true}
             accessibilityRole="progressbar"
             accessibilityLabel="Буферизация..."
+            accessibilityLiveRegion="polite"
           >
             <ActivityIndicator size="small" color={colors.primary} accessible={false} />
             <Text style={[s.bufferingTxt, { fontSize: t.xs, color: c.textMuted }]} accessible={false}>Жүктелуде...</Text>
@@ -452,12 +460,24 @@ export default function PlayerScreen() {
           thumbTintColor={loading || isBuffering ? colors.borderSoft : colors.primary}
           disabled={loading || isBuffering}
           onSlidingStart={() => setIsSeeking(true)}
-          onValueChange={(v) => setSliderPosition(v)}
+          onValueChange={(v) => {
+            setSliderPosition(v);
+            if (Math.abs(v - lastSeekAnnouncedRef.current) >= 5) {
+              lastSeekAnnouncedRef.current = v;
+              announceForAccessibility(formatTimeVoice(v));
+            }
+          }}
           onSlidingComplete={async (v) => { setIsSeeking(false); await audioService.seekTo(v); }}
           accessible={true}
           accessibilityRole="adjustable"
           accessibilityLabel={`Позиция: ${formatTimeVoice(position)} из ${formatTimeVoice(duration)}`}
           accessibilityHint="Проведите вверх или вниз для перемотки"
+          accessibilityValue={{
+            min: 0,
+            max: Math.floor(duration) || 1,
+            now: Math.floor(position),
+            text: `${formatTimeVoice(position)} из ${formatTimeVoice(duration)}`,
+          }}
         />
         <View style={s.timeRow} accessible={false}>
           <Text style={[s.timeText, { fontSize: t.sm, color: c.textMuted }]} accessible={false}>{formatTime(position)}</Text>

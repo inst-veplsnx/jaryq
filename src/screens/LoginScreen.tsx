@@ -48,12 +48,12 @@ export default function LoginScreen() {
     try {
       const result = await signIn(email.trim(), password);
       if (result.error) {
-        const msg = result.error.includes('Invalid') ? 'Қате email немесе құпия сөз' : result.error;
-        Alert.alert('Кіру қатесі', msg);
+        const msg = result.error.includes('Invalid') ? 'Неверный email или пароль' : result.error;
+        Alert.alert('Ошибка входа', msg);
         announceForAccessibility(`Ошибка: ${msg}`);
       }
     } catch {
-      Alert.alert('Қате', 'Сервермен байланыс жоқ');
+      Alert.alert('Ошибка', 'Нет соединения с сервером');
       announceForAccessibility('Ошибка: нет соединения с сервером');
     }
   };

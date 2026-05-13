@@ -16,3 +16,6 @@ web-build/
 .env.development
 .env.production
 .env.*.local
+
+# Claude Code local settings
+.claude/

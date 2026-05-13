@@ -13,6 +13,7 @@ type Nav = StackNavigationProp<HomeStackParamList, 'Home'>;
 const MENU: {
   id: string;
   label: string;
+  a11yLabel: string;
   sub: string;
   icon: IconName;
   screen: string;
@@ -20,11 +21,11 @@ const MENU: {
   accent: string;
   bg: string;
 }[] = [
-  { id: 'new',    label: 'Жаңа кітаптар',        sub: 'Жаңа аудиокітаптар',   icon: 'sparkles', screen: 'NewArrivals', hint: 'Просмотр новых книг',    accent: colors.primary,       bg: colors.primarySoft       },
-  { id: 'genres', label: 'Жанрлар',            sub: 'Барлық санаттар',       icon: 'albums',   screen: 'Genres',     hint: 'Книги по категориям',  accent: colors.accentBlue,    bg: colors.accentBlueSoft    },
-  { id: 'popular',label: 'Танымал',             sub: 'Тыңдаушылар топ-тізімі', icon: 'flame', screen: 'Popular',    hint: 'Популярные книги',     accent: colors.accentRed,     bg: colors.accentRedSoft     },
-  { id: 'all',    label: 'Барлық кітаптар',    sub: 'Алфавит бойынша',       icon: 'book',     screen: 'AllBooks',   hint: 'Весь список книг',     accent: colors.accentPurple,  bg: colors.accentPurpleSoft  },
-  { id: 'fav',    label: 'Таңдаулы',           sub: 'Сіздің тізіміңіз',      icon: 'heart',    screen: 'Favorites',  hint: 'Ваши избранные книги', accent: colors.accentPink,    bg: colors.accentPinkSoft    },
+  { id: 'new',    label: 'Жаңа кітаптар',     a11yLabel: 'Новые книги',     sub: 'Жаңа аудиокітаптар',    icon: 'sparkles', screen: 'NewArrivals', hint: 'Просмотр новых книг',    accent: colors.primary,       bg: colors.primarySoft       },
+  { id: 'genres', label: 'Жанрлар',           a11yLabel: 'Жанры',           sub: 'Барлық санаттар',        icon: 'albums',   screen: 'Genres',     hint: 'Книги по категориям',  accent: colors.accentBlue,    bg: colors.accentBlueSoft    },
+  { id: 'popular',label: 'Танымал',           a11yLabel: 'Популярное',      sub: 'Тыңдаушылар топ-тізімі', icon: 'flame',    screen: 'Popular',    hint: 'Популярные книги',     accent: colors.accentRed,     bg: colors.accentRedSoft     },
+  { id: 'all',    label: 'Барлық кітаптар',   a11yLabel: 'Все книги',       sub: 'Алфавит бойынша',        icon: 'book',     screen: 'AllBooks',   hint: 'Весь список книг',     accent: colors.accentPurple,  bg: colors.accentPurpleSoft  },
+  { id: 'fav',    label: 'Таңдаулы',          a11yLabel: 'Избранное',       sub: 'Сіздің тізіміңіз',       icon: 'heart',    screen: 'Favorites',  hint: 'Ваши избранные книги', accent: colors.accentPink,    bg: colors.accentPinkSoft    },
 ];
 
 export default function HomeScreen() {
@@ -76,6 +77,7 @@ export default function HomeScreen() {
           style={[s.sectionTitle, { fontSize: t.xs, color: c.textMuted }]}
           accessible={true}
           accessibilityRole="header"
+          accessibilityLabel="Разделы"
         >
           Бөлімдер
         </Text>
@@ -87,7 +89,7 @@ export default function HomeScreen() {
             onPress={() => navigation.navigate(item.screen as any)}
             accessible={true}
             accessibilityRole="button"
-            accessibilityLabel={item.label}
+            accessibilityLabel={item.a11yLabel}
             accessibilityHint={`Дважды нажмите — ${item.hint}`}
             activeOpacity={interaction.activeOpacity}
           >

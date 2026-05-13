@@ -58,12 +58,12 @@ export default function RegisterScreen() {
     try {
       const result = await signUp(email.trim(), pass, name.trim());
       if (result.error) {
-        const msg = result.error.includes('already') ? 'Бұл email бұрыннан тіркелген' : result.error;
-        Alert.alert('Қате', msg);
+        const msg = result.error.includes('already') ? 'Этот email уже зарегистрирован' : result.error;
+        Alert.alert('Ошибка', msg);
         announceForAccessibility(`Ошибка: ${msg}`);
       }
     } catch {
-      Alert.alert('Қате', 'Сервермен байланыс жоқ');
+      Alert.alert('Ошибка', 'Нет соединения с сервером');
       announceForAccessibility('Ошибка: нет соединения с сервером');
     }
   };

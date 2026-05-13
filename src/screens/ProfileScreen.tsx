@@ -63,9 +63,9 @@ export function ProfileScreen() {
     .toUpperCase();
 
   const handleSignOut = () =>
-    Alert.alert('Шығу', 'Шыққыңыз келетінін растайсыз ба?', [
-      { text: 'Бас тарту', style: 'cancel' },
-      { text: 'Шығу', style: 'destructive', onPress: signOut },
+    Alert.alert('Выход', 'Вы уверены, что хотите выйти?', [
+      { text: 'Отмена', style: 'cancel' },
+      { text: 'Выйти', style: 'destructive', onPress: signOut },
     ]);
 
   return (
@@ -101,7 +101,7 @@ export function ProfileScreen() {
           label="Приложение туралы"
           a11yLabel="О приложении"
           hint="Информация о приложении JARYQ"
-          onPress={() => Alert.alert('JARYQ v1.0', 'Samsung TalkBack қолдауы бар дыбыстық кітапхана')}
+          onPress={() => Alert.alert('JARYQ v1.0', 'Аудиобиблиотека с поддержкой Samsung TalkBack')}
         />
         <MenuItem
           icon="accessibility-outline"
@@ -110,8 +110,8 @@ export function ProfileScreen() {
           hint="Инструкция по управлению через TalkBack"
           onPress={() =>
             Alert.alert(
-              'TalkBack басқару',
-              '• Бір рет басу — фокус және дыбыстау\n• Екі рет басу — белсендіру\n• Солға/оңға сырғыту — элементтер арасында өту\n• Айналдыру сырғытпасы: жоғары/төмен сырғыту',
+              'Управление TalkBack',
+              '• Одно нажатие — фокус и озвучивание\n• Двойное нажатие — активировать\n• Смахивание влево/вправо — перемещение между элементами\n• Жест вращения: смахивание вверх/вниз',
             )
           }
         />
@@ -199,19 +199,19 @@ export function SettingsScreen() {
   const handleClearProgress = () => {
     if (!user) return;
     Alert.alert(
-      'Үлгерімді тазалау',
-      'Барлық сақталған тыңдау үлгерімі жойылады. Жалғастыру?',
+      'Очистить прогресс',
+      'Весь сохранённый прогресс прослушивания будет удалён. Продолжить?',
       [
-        { text: 'Бас тарту', style: 'cancel' },
+        { text: 'Отмена', style: 'cancel' },
         {
-          text: 'Жою',
+          text: 'Удалить',
           style: 'destructive',
           onPress: async () => {
             try {
               await bookService.clearAllProgress(user.id);
-              Alert.alert('Дайын', 'Үлгерім сәтті тазаланды');
+              Alert.alert('Готово', 'Прогресс успешно очищен');
             } catch {
-              Alert.alert('Қате', 'Үлгерімді тазалау сәтсіз аяқталды. Қайталап көріңіз.');
+              Alert.alert('Ошибка', 'Не удалось очистить прогресс. Попробуйте ещё раз.');
             }
           },
         },
@@ -221,16 +221,16 @@ export function SettingsScreen() {
 
   const handleDeleteAllDownloads = () => {
     Alert.alert(
-      'Барлық жүктеулерді жою',
-      `Барлық жүктелген кітаптар (${downloadedBooks.length}, ${formatFileSize(downloadsSize)}) жойылады. Жалғастыру?`,
+      'Удалить все загрузки',
+      `Будут удалены все загруженные книги (${downloadedBooks.length}, ${formatFileSize(downloadsSize)}). Продолжить?`,
       [
-        { text: 'Бас тарту', style: 'cancel' },
+        { text: 'Отмена', style: 'cancel' },
         {
-          text: 'Жою',
+          text: 'Удалить',
           style: 'destructive',
           onPress: async () => {
             await deleteAllDownloads();
-            Alert.alert('Дайын', 'Барлық жүктеулер жойылды');
+            Alert.alert('Готово', 'Все загрузки удалены');
           },
         },
       ],
@@ -242,7 +242,7 @@ export function SettingsScreen() {
 
       {/* Воспроизведение */}
       <View style={[s.settingsSection, { backgroundColor: c.bgCard }]}>
-        <Text style={[s.sectionTitle, { color: c.textMuted }]} accessible={true} accessibilityRole="header">
+        <Text style={[s.sectionTitle, { color: c.textMuted }]} accessible={true} accessibilityRole="header" accessibilityLabel="Воспроизведение">
           Ойнату
         </Text>
         <SettingRow
@@ -267,7 +267,7 @@ export function SettingsScreen() {
 
       {/* Доступность */}
       <View style={[s.settingsSection, { backgroundColor: c.bgCard }]}>
-        <Text style={[s.sectionTitle, { color: c.textMuted }]} accessible={true} accessibilityRole="header">
+        <Text style={[s.sectionTitle, { color: c.textMuted }]} accessible={true} accessibilityRole="header" accessibilityLabel="Доступность">
           Қолжетімділік
         </Text>
         <SettingRow
@@ -339,7 +339,7 @@ export function SettingsScreen() {
 
       {/* Данные — всегда в самом низу */}
       <View style={[s.settingsSection, { backgroundColor: c.bgCard }]}>
-        <Text style={[s.sectionTitle, { color: c.textMuted }]} accessible={true} accessibilityRole="header">
+        <Text style={[s.sectionTitle, { color: c.textMuted }]} accessible={true} accessibilityRole="header" accessibilityLabel="Данные">
           Деректер
         </Text>
         <TouchableOpacity
